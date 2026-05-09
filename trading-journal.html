@@ -198,4 +198,1596 @@
 
     .stat-value {
       font: 700 24px var(--mono);
-      
+      letter-spacing: -0.03em;
+    }
+    .pos { color: var(--win); }
+    .neg { color: var(--loss); }
+
+    .month-view {
+      padding: 0 16px 16px;
+    }
+
+    .month-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .month-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .month-card-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .month-card-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .calendar-head,
+    .calendar-row {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr)) minmax(150px, 0.9fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .calendar-head {
+      margin-bottom: 10px;
+    }
+
+    .calendar-label,
+    .week-total-label {
+      padding: 8px 10px;
+      font: 700 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .calendar-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .calendar-day {
+      min-height: 112px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .calendar-day.current-month {
+      cursor: pointer;
+    }
+
+    .calendar-day.current-month:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .calendar-day.no-trades {
+      background: rgba(255, 255, 255, 0.012);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .calendar-day.no-trades .calendar-day-num {
+      color: #728097;
+    }
+
+    .calendar-day.no-trades .calendar-day-badge,
+    .calendar-day.no-trades .calendar-metric,
+    .calendar-day.no-trades .calendar-metric strong {
+      color: #667388;
+    }
+
+    .month-nav-btn {
+      min-width: 42px;
+      justify-content: center;
+      padding-inline: 0;
+      font: 700 20px/1 var(--mono);
+    }
+
+    .calendar-day.outside {
+      opacity: 0.35;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .calendar-day.today {
+      box-shadow: inset 0 0 0 1px rgba(79, 124, 255, 0.42);
+    }
+
+    .calendar-day.selected {
+      border-color: rgba(79, 124, 255, 0.72);
+      background: rgba(79, 124, 255, 0.1);
+    }
+
+    .calendar-day-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calendar-day-num {
+      font: 700 16px var(--mono);
+      color: var(--text);
+    }
+
+    .calendar-day-badge {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .calendar-day-stats {
+      display: grid;
+      gap: 5px;
+      margin-top: auto;
+    }
+
+    .calendar-metric {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .calendar-metric strong {
+      font-family: var(--mono);
+      color: var(--text);
+    }
+
+    .calendar-metric strong.pos { color: var(--win); }
+    .calendar-metric strong.neg { color: var(--loss); }
+
+    .week-total {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(79, 124, 255, 0.09), rgba(79, 124, 255, 0.02));
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .week-total small {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-family: var(--mono);
+    }
+
+    .week-total-value {
+      font: 700 20px var(--mono);
+    }
+
+    .week-total-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .day-detail {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+      gap: 12px;
+    }
+
+    .day-panel {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 16px;
+    }
+
+    .day-panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .day-panel-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .day-inline-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .day-inline-stat {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .day-inline-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .day-inline-stat strong {
+      font: 700 18px var(--mono);
+    }
+
+    .day-records {
+      margin-top: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .day-record {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .day-record-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .day-record-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .day-record-rr {
+      font: 700 15px var(--mono);
+      white-space: nowrap;
+    }
+
+    .table-shell {
+      padding: 0 16px 16px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 13px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .date-cell, .rr-cell, .cum-cell { font-family: var(--mono); white-space: nowrap; }
+    .symbol { font-size: 14px; font-weight: 600; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.05em;
+    }
+    .badge.win { background: var(--win-bg); color: var(--win); }
+    .badge.loss { background: var(--loss-bg); color: var(--loss); }
+    .session-pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .note {
+      max-width: 230px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #ced6e3;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 180px;
+    }
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      transition: transform 0.18s ease;
+    }
+    .thumb:hover { transform: scale(1.06); }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: #c9d3e3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .icon-btn:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
+    .icon-btn.danger { color: var(--loss); }
+    .icon-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .month-separator td {
+      background: var(--accent-soft);
+      color: #b9caff;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom-color: rgba(79, 124, 255, 0.22);
+    }
+
+    .empty, .loading {
+      padding: 72px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty strong, .loading strong { display: block; margin-bottom: 8px; color: var(--text); font-size: 18px; }
+    .spinner {
+      width: 30px;
+      height: 30px;
+      margin: 0 auto 14px;
+      border: 2px solid var(--border-strong);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .modal-bg, .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 20;
+    }
+
+    .modal-bg { background: rgba(4, 8, 16, 0.76); backdrop-filter: blur(5px); }
+    .lightbox { background: rgba(0, 0, 0, 0.88); z-index: 30; }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: #111722;
+      border: 1px solid var(--border-strong);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .modal-title { font-size: 22px; font-weight: 700; }
+    .modal-sub { color: var(--muted); font-size: 13px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      background: #0c1119;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.14);
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .result-btn {
+      border: 1px solid var(--border-strong);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 14px;
+      padding: 14px;
+      font: 700 14px var(--mono);
+      letter-spacing: 0.05em;
+    }
+    .result-btn.active.win { border-color: var(--win); background: var(--win-bg); color: var(--win); }
+    .result-btn.active.loss { border-color: var(--loss); background: var(--loss-bg); color: var(--loss); }
+
+    .upload-zone {
+      border: 1px dashed var(--border-strong);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      text-align: center;
+      color: var(--muted);
+      position: relative;
+      transition: 0.18s ease;
+    }
+
+    .upload-zone.drag { background: rgba(79, 124, 255, 0.08); border-color: var(--accent); color: var(--text); }
+    .upload-zone input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .upload-copy { font-size: 13px; }
+    .upload-copy strong { display: block; color: var(--text); margin-bottom: 4px; }
+
+    .preview-list {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .preview-item {
+      position: relative;
+      width: 82px;
+      height: 82px;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--border-strong);
+    }
+
+    .preview-remove {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--loss);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .modal-foot {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      z-index: 40;
+      min-width: 200px;
+      max-width: calc(100vw - 24px);
+      padding: 12px 16px;
+      background: #121926;
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+      text-align: center;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; }
+    .toast.err { border-color: rgba(255, 102, 120, 0.6); color: #ffd0d6; }
+    .toast.ok { border-color: rgba(19, 199, 132, 0.6); color: #caf8e4; }
+
+    @media (max-width: 860px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .calendar-head,
+      .calendar-row { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+      .week-total-label { display: none; }
+      .week-total {
+        grid-column: 1 / -1;
+        min-height: auto;
+      }
+      .day-detail { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .shell { width: min(100vw - 16px, 1180px); padding-top: 16px; }
+      .topbar { flex-direction: column; align-items: stretch; }
+      .panel-head { align-items: stretch; }
+      .actions { justify-content: stretch; }
+      .actions .btn { flex: 1; justify-content: center; }
+      .stats { grid-template-columns: 1fr; }
+      .result-row { grid-template-columns: 1fr; }
+      .modal { padding: 18px; border-radius: 18px; }
+      .modal-title { font-size: 20px; }
+      .calendar-head { display: none; }
+      .calendar-grid { gap: 12px; }
+      .calendar-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .calendar-day {
+        min-height: 104px;
+        padding: 9px;
+      }
+      .calendar-day:nth-child(n+3) {
+        grid-column: span 1;
+      }
+      .week-total {
+        grid-column: 1 / -1;
+      }
+      .day-inline-stats { grid-template-columns: 1fr; }
+      .day-record { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"><span>//</span> trading journal</div>
+        <div class="headline">交易紀錄系統</div>
+        <div class="subhead">支援手機與電腦共用，同步到 Google Sheets。</div>
+      </div>
+      <div class="sync-wrap">
+        <span class="sync-dot loading" id="sync-dot"></span>
+        <span id="sync-text">連線中</span>
+      </div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="tabs">
+          <button class="tab active" data-tab="all" type="button">全部交易</button>
+          <button class="tab" data-tab="month" id="month-tab" type="button">當月交易</button>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" type="button" id="refresh-btn">
+            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9A9 9 0 0 1 18.36 5.64L23 10"></path><path d="M20.49 15A9 9 0 0 1 5.64 18.36L1 14"></path></svg>
+            重新整理
+          </button>
+          <button class="btn btn-primary" type="button" id="add-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+            新增交易
+          </button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div id="month-view" class="month-view" style="display:none"></div>
+
+      <div id="table-area">
+        <div class="loading">
+          <div class="spinner"></div>
+          <strong>載入資料中</strong>
+          正在從 Google Sheets 抓取紀錄...
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modal-title">新增交易</div>
+          <div class="modal-sub">記錄商品、RR、時段、文字備註與圖片。</div>
+        </div>
+        <button class="icon-btn" type="button" id="close-modal-btn" aria-label="關閉">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="f-symbol">交易商品名稱</label>
+          <input id="f-symbol" placeholder="BTC/USDT、NQ、AAPL..." />
+        </div>
+
+        <div class="field">
+          <label for="f-date">日期</label>
+          <input id="f-date" type="date" />
+        </div>
+
+        <div class="field">
+          <label for="f-session">交易時段</label>
+          <select id="f-session">
+            <option value="亞洲盤">亞洲盤</option>
+            <option value="歐洲盤">歐洲盤</option>
+            <option value="倫敦盤">倫敦盤</option>
+            <option value="美盤">美盤</option>
+            <option value="紐約盤">紐約盤</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-rr">RR 值</label>
+          <input id="f-rr" type="number" step="0.1" min="0.1" placeholder="例如 2.5" />
+        </div>
+
+        <div class="field full">
+          <label>結果</label>
+          <div class="result-row">
+            <button class="result-btn win" type="button" data-result="win">WIN ▲</button>
+            <button class="result-btn loss" type="button" data-result="loss">LOSS ▼</button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="f-note">文字紀錄</label>
+          <textarea id="f-note" placeholder="策略、進出場思路、檢討、情緒記錄..."></textarea>
+        </div>
+
+        <div class="field full">
+          <label>圖片</label>
+          <div class="upload-zone" id="upload-zone">
+            <input id="f-imgs" type="file" accept="image/*" multiple>
+            <div class="upload-copy">
+              <strong>點擊、拖曳，或直接貼上圖片</strong>
+              支援多張截圖，會自動壓縮後再同步。
+            </div>
+          </div>
+          <div class="preview-list" id="preview-list"></div>
+          <div class="hint">建議單張小於 2MB。為了讓 Google Sheets 不容易爆量，圖片會先縮圖壓縮。</div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-ghost" type="button" id="cancel-btn">取消</button>
+        <button class="btn btn-primary" type="button" id="save-btn">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="交易截圖">
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbx5jkUY3yvXGTnBe3_PNbvDVw6s9hl-Frvm2tZDnbMSPE3d7A4zDs6OlNWLCqDCjASxfg/exec";
+    const MAX_IMAGE_SIDE = 1600;
+    const JPEG_QUALITY = 0.82;
+
+    let records = [];
+    let currentTab = "all";
+    let selectedResult = "";
+    let editingId = "";
+    let pendingImages = [];
+    let isSaving = false;
+    let selectedCalendarDate = "";
+    let activeMonthKey = "";
+
+    const el = {
+      syncDot: document.getElementById("sync-dot"),
+      syncText: document.getElementById("sync-text"),
+      stats: document.getElementById("stats"),
+      monthView: document.getElementById("month-view"),
+      tableArea: document.getElementById("table-area"),
+      monthTab: document.getElementById("month-tab"),
+      modalBg: document.getElementById("modal-bg"),
+      modalTitle: document.getElementById("modal-title"),
+      symbol: document.getElementById("f-symbol"),
+      date: document.getElementById("f-date"),
+      session: document.getElementById("f-session"),
+      rr: document.getElementById("f-rr"),
+      note: document.getElementById("f-note"),
+      previewList: document.getElementById("preview-list"),
+      fileInput: document.getElementById("f-imgs"),
+      uploadZone: document.getElementById("upload-zone"),
+      saveBtn: document.getElementById("save-btn"),
+      toast: document.getElementById("toast"),
+      lightbox: document.getElementById("lightbox"),
+      lightboxImg: document.getElementById("lightbox-img")
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function showToast(message, type = "ok") {
+      el.toast.textContent = message;
+      el.toast.className = `toast show ${type}`;
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        el.toast.className = "toast";
+      }, 2400);
+    }
+
+    function setSyncStatus(state, text) {
+      el.syncDot.className = `sync-dot ${state}`;
+      el.syncText.textContent = text;
+    }
+
+    function todayString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatMonthLabel(year, monthIndex) {
+      return `${year}/${String(monthIndex + 1).padStart(2, "0")}`;
+    }
+
+    function getMonthKey(dateStr) {
+      return String(dateStr || "").slice(0, 7);
+    }
+
+    function parseDateParts(dateStr) {
+      const [year, month, day] = String(dateStr || "").split("-").map(Number);
+      return { year, month, day };
+    }
+
+    function toLocalDate(dateStr) {
+      const { year, month, day } = parseDateParts(dateStr);
+      return new Date(year, month - 1, day);
+    }
+
+    function formatDateLabel(dateStr) {
+      const { year, month, day } = parseDateParts(dateStr);
+      return `${year}/${String(month).padStart(2, "0")}/${String(day).padStart(2, "0")}`;
+    }
+
+    function getTodayMonthKey() {
+      return getMonthKey(todayString());
+    }
+
+    function getActiveMonthKey() {
+      return activeMonthKey || getTodayMonthKey();
+    }
+
+    function shiftMonthKey(monthKey, offset) {
+      const [year, month] = monthKey.split("-").map(Number);
+      const shifted = new Date(year, month - 1 + offset, 1);
+      return `${shifted.getFullYear()}-${String(shifted.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function getMonthRecords(monthKey = getActiveMonthKey()) {
+      return sortRecordsDesc(records).filter((record) => getMonthKey(record.date) === monthKey);
+    }
+
+    function getRecordsByDate(list) {
+      const map = new Map();
+      list.forEach((record) => {
+        if (!map.has(record.date)) map.set(record.date, []);
+        map.get(record.date).push(record);
+      });
+      return map;
+    }
+
+    function ensureSelectedCalendarDate(monthRecords, monthKey = getActiveMonthKey()) {
+      const dates = [...new Set(monthRecords.map((record) => record.date))].sort();
+      if (selectedCalendarDate && getMonthKey(selectedCalendarDate) === monthKey) {
+        return;
+      }
+      const defaultDay = monthKey === getTodayMonthKey() && dates.includes(todayString())
+        ? todayString()
+        : (dates[dates.length - 1] || `${monthKey}-01`);
+      selectedCalendarDate = defaultDay;
+    }
+
+    function getCalendarWeeks(monthKey) {
+      const [year, month] = monthKey.split("-").map(Number);
+      const firstOfMonth = new Date(year, month - 1, 1);
+      const start = new Date(firstOfMonth);
+      start.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
+
+      const lastOfMonth = new Date(year, month, 0);
+      const end = new Date(lastOfMonth);
+      end.setDate(lastOfMonth.getDate() + (6 - lastOfMonth.getDay()));
+
+      const weeks = [];
+      const cursor = new Date(start);
+      while (cursor <= end) {
+        const week = [];
+        for (let i = 0; i < 7; i += 1) {
+          const y = cursor.getFullYear();
+          const m = String(cursor.getMonth() + 1).padStart(2, "0");
+          const d = String(cursor.getDate()).padStart(2, "0");
+          week.push(`${y}-${m}-${d}`);
+          cursor.setDate(cursor.getDate() + 1);
+        }
+        weeks.push(week);
+      }
+      return weeks;
+    }
+
+    function normalizeRecord(raw) {
+      const result = raw.result === "loss" ? "loss" : "win";
+      const rr = Math.abs(Number(raw.rr) || 0);
+      const imgs = Array.isArray(raw.imgs) ? raw.imgs.filter(Boolean) : [];
+      return {
+        id: String(raw.id || Date.now()),
+        date: /^\d{4}-\d{2}-\d{2}$/.test(raw.date || "") ? raw.date : todayString(),
+        symbol: String(raw.symbol || "").trim(),
+        result,
+        rr,
+        session: String(raw.session || "其他").trim() || "其他",
+        note: String(raw.note || ""),
+        imgs
+      };
+    }
+
+    function sortRecordsDesc(list) {
+      return [...list].sort((a, b) => {
+        if (a.date === b.date) return String(b.id).localeCompare(String(a.id));
+        return String(b.date).localeCompare(String(a.date));
+      });
+    }
+
+    function getVisibleRecords() {
+      const sorted = sortRecordsDesc(records);
+      if (currentTab === "all") return sorted;
+      const monthKey = getActiveMonthKey();
+      return sorted.filter((record) => getMonthKey(record.date) === monthKey);
+    }
+
+    function calcStats(list) {
+      const total = list.length;
+      const wins = list.filter((r) => r.result === "win").length;
+      const losses = total - wins;
+      const totalRR = list.reduce((sum, r) => sum + (r.result === "win" ? r.rr : -r.rr), 0);
+      const winRate = total ? ((wins / total) * 100).toFixed(1) : "—";
+      return { total, wins, losses, totalRR, winRate };
+    }
+
+    function renderStats(list) {
+      const stats = calcStats(list);
+      el.stats.innerHTML = `
+        <div class="stat">
+          <div class="stat-label">交易次數</div>
+          <div class="stat-value">${stats.total}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">勝率</div>
+          <div class="stat-value ${stats.total && Number(stats.winRate) < 50 ? "neg" : "pos"}">${stats.total ? `${stats.winRate}%` : "—"}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">贏 / 輸</div>
+          <div class="stat-value"><span class="pos">${stats.wins}</span> / <span class="neg">${stats.losses}</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">總 RR</div>
+          <div class="stat-value ${stats.totalRR < 0 ? "neg" : "pos"}">${stats.totalRR >= 0 ? "+" : ""}${stats.totalRR.toFixed(2)}R</div>
+        </div>
+      `;
+    }
+
+    function renderMonthView(monthRecords) {
+      if (currentTab !== "month") {
+        el.monthView.style.display = "none";
+        el.monthView.innerHTML = "";
+        return;
+      }
+
+      el.monthView.style.display = "block";
+      const monthKey = getActiveMonthKey();
+      ensureSelectedCalendarDate(monthRecords, monthKey);
+
+      const weeks = getCalendarWeeks(monthKey);
+      const byDate = getRecordsByDate(records);
+      const selectedList = sortRecordsDesc(byDate.get(selectedCalendarDate) || []);
+      const selectedStats = calcStats(selectedList);
+      const canGoNext = monthKey < getTodayMonthKey();
+
+      const weekRows = weeks.map((week) => {
+        const dayCells = week.map((dateStr) => {
+          const dayRecords = sortRecordsDesc(byDate.get(dateStr) || []);
+          const stats = calcStats(dayRecords);
+          const isCurrentMonth = getMonthKey(dateStr) === monthKey;
+          const dayNum = dateStr.slice(-2);
+          const signedRR = stats.totalRR;
+          return `
+            <button
+              class="calendar-day ${isCurrentMonth ? "current-month" : "outside"} ${dayRecords.length ? "" : "no-trades"} ${dateStr === todayString() ? "today" : ""} ${dateStr === selectedCalendarDate ? "selected" : ""}"
+              type="button"
+              data-action="select-day"
+              data-date="${dateStr}"
+              ${isCurrentMonth ? "" : "tabindex=\"-1\""}
+            >
+              <div class="calendar-day-top">
+                <span class="calendar-day-num">${dayNum}</span>
+                <span class="calendar-day-badge">${dayRecords.length} 筆</span>
+              </div>
+              <div class="calendar-day-stats">
+                <div class="calendar-metric"><span>當日 RR</span><strong class="${signedRR < 0 ? "neg" : "pos"}">${signedRR >= 0 ? "+" : ""}${signedRR.toFixed(1)}R</strong></div>
+                <div class="calendar-metric"><span>勝率</span><strong>${dayRecords.length ? `${stats.winRate}%` : "—"}</strong></div>
+              </div>
+            </button>
+          `;
+        }).join("");
+
+        const weekRecords = week.flatMap((dateStr) => byDate.get(dateStr) || []);
+        const weekStats = calcStats(weekRecords);
+        const weekStart = week[0].slice(5);
+        const weekEnd = week[6].slice(5);
+
+        return `
+          <div class="calendar-row">
+            ${dayCells}
+            <div class="week-total">
+              <small>週六結算</small>
+              <div class="week-total-value ${weekStats.totalRR < 0 ? "neg" : "pos"}">${weekStats.totalRR >= 0 ? "+" : ""}${weekStats.totalRR.toFixed(2)}R</div>
+              <div class="week-total-meta">${weekStart} - ${weekEnd} · ${weekStats.total} 筆 · ${weekStats.wins}W/${weekStats.losses}L</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const selectedRecordsHtml = selectedList.length
+        ? selectedList.map((record) => {
+            const signedRR = record.result === "win" ? record.rr : -record.rr;
+            return `
+              <div class="day-record">
+                <div>
+                  <div class="day-record-title">${escapeHtml(record.symbol || "—")}</div>
+                  <div class="day-record-meta">${escapeHtml(record.session || "—")} · ${record.result === "win" ? "WIN" : "LOSS"}${record.note ? ` · ${escapeHtml(record.note).slice(0, 48)}${record.note.length > 48 ? "..." : ""}` : ""}</div>
+                </div>
+                <div class="day-record-rr ${signedRR < 0 ? "neg" : "pos"}">${signedRR >= 0 ? "+" : ""}${signedRR.toFixed(1)}R</div>
+              </div>
+            `;
+          }).join("")
+        : `<div class="day-record"><div><div class="day-record-title">這一天沒有交易</div><div class="day-record-meta">點其他日期可以查看當日勝率與明細。</div></div></div>`;
+
+      el.monthView.innerHTML = `
+        <div class="month-card">
+          <div class="month-card-header">
+            <div>
+              <div class="month-card-title">${monthKey} 月曆總覽</div>
+              <div class="month-card-sub">每天顯示當日 RR 與交易筆數，點日期可查看當日勝率；每列右側為該週到週六的總 RR。</div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-ghost month-nav-btn" type="button" data-action="change-month" data-offset="-1" aria-label="上個月">‹</button>
+              <button class="btn btn-ghost month-nav-btn" type="button" data-action="change-month" data-offset="1" ${canGoNext ? "" : "disabled"} aria-label="下個月">›</button>
+            </div>
+          </div>
+
+          <div class="calendar-head">
+            <div class="calendar-label">Sun</div>
+            <div class="calendar-label">Mon</div>
+            <div class="calendar-label">Tue</div>
+            <div class="calendar-label">Wed</div>
+            <div class="calendar-label">Thu</div>
+            <div class="calendar-label">Fri</div>
+            <div class="calendar-label">Sat</div>
+            <div class="week-total-label">Weekly RR</div>
+          </div>
+
+          <div class="calendar-grid">${weekRows}</div>
+
+          <div class="day-detail">
+            <div class="day-panel">
+              <div class="day-panel-title">${formatDateLabel(selectedCalendarDate)} 當日交易</div>
+              <div class="day-panel-sub">這裡會顯示你點選日期的交易明細與勝率。</div>
+              <div class="day-inline-stats">
+                <div class="day-inline-stat">
+                  <span>當日 RR</span>
+                  <strong class="${selectedStats.totalRR < 0 ? "neg" : "pos"}">${selectedStats.totalRR >= 0 ? "+" : ""}${selectedStats.totalRR.toFixed(2)}R</strong>
+                </div>
+                <div class="day-inline-stat">
+                  <span>交易筆數</span>
+                  <strong>${selectedStats.total}</strong>
+                </div>
+                <div class="day-inline-stat">
+                  <span>當日勝率</span>
+                  <strong>${selectedStats.total ? `${selectedStats.winRate}%` : "—"}</strong>
+                </div>
+              </div>
+              <div class="day-records">${selectedRecordsHtml}</div>
+            </div>
+
+            <div class="day-panel">
+              <div class="day-panel-title">當日摘要</div>
+              <div class="day-panel-sub">${selectedStats.wins} 勝 / ${selectedStats.losses} 負</div>
+              <div class="day-inline-stats">
+                <div class="day-inline-stat">
+                  <span>贏單</span>
+                  <strong class="pos">${selectedStats.wins}</strong>
+                </div>
+                <div class="day-inline-stat">
+                  <span>輸單</span>
+                  <strong class="neg">${selectedStats.losses}</strong>
+                </div>
+                <div class="day-inline-stat">
+                  <span>點選日期</span>
+                  <strong>${selectedCalendarDate.slice(-2)}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildDataRows(rows) {
+      const chronological = [...rows].sort((a, b) => {
+        if (a.date === b.date) return String(a.id).localeCompare(String(b.id));
+        return String(a.date).localeCompare(String(b.date));
+      });
+
+      const cumulativeMap = new Map();
+      let runningRR = 0;
+      chronological.forEach((record) => {
+        runningRR += record.result === "win" ? record.rr : -record.rr;
+        cumulativeMap.set(record.id, runningRR);
+      });
+
+      return rows.map((record) => {
+        const rrSigned = record.result === "win" ? record.rr : -record.rr;
+        const images = record.imgs.map((src) =>
+          `<img class="thumb" src="${escapeHtml(src)}" alt="交易截圖" data-action="lightbox" data-src="${escapeHtml(src)}">`
+        ).join("");
+
+        return `
+          <tr>
+            <td class="date-cell">${escapeHtml(record.date)}</td>
+            <td><div class="symbol">${escapeHtml(record.symbol || "—")}</div></td>
+            <td><span class="badge ${record.result}">${record.result === "win" ? "WIN" : "LOSS"}</span></td>
+            <td class="rr-cell ${rrSigned < 0 ? "neg" : "pos"}">${rrSigned >= 0 ? "+" : ""}${rrSigned.toFixed(1)}R</td>
+            <td class="cum-cell ${cumulativeMap.get(record.id) < 0 ? "neg" : "pos"}">${cumulativeMap.get(record.id) >= 0 ? "+" : ""}${cumulativeMap.get(record.id).toFixed(1)}R</td>
+            <td><span class="session-pill">${escapeHtml(record.session || "—")}</span></td>
+            <td><div class="note">${escapeHtml(record.note || "").replace(/\n/g, "<br>") || "—"}</div></td>
+            <td><div class="thumbs">${images || "—"}</div></td>
+            <td>
+              <div class="row-actions">
+                <button class="icon-btn" type="button" data-action="edit" data-id="${escapeHtml(record.id)}" aria-label="編輯">
+                  <svg viewBox="0 0 24 24"><path d="M12 20H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h7"></path><path d="M18.37 2.63a2.12 2.12 0 1 1 3 3L12 15l-4 1 1-4Z"></path></svg>
+                </button>
+                <button class="icon-btn danger" type="button" data-action="delete" data-id="${escapeHtml(record.id)}" aria-label="刪除">
+                  <svg viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderTable(list) {
+      if (!list.length) {
+        el.tableArea.innerHTML = `
+          <div class="empty">
+            <strong>還沒有交易紀錄</strong>
+            點上方「新增交易」開始記錄你的交易。
+          </div>
+        `;
+        return;
+      }
+
+      let bodyHtml = "";
+
+      if (currentTab === "all") {
+        const groups = new Map();
+        list.forEach((record) => {
+          const key = getMonthKey(record.date);
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(record);
+        });
+
+        [...groups.keys()].sort().reverse().forEach((monthKey) => {
+          const group = groups.get(monthKey);
+          const stats = calcStats(group);
+          bodyHtml += `
+            <tr class="month-separator">
+              <td colspan="9">${escapeHtml(monthKey)} · ${group.length} 筆 · ${stats.wins}W/${stats.losses}L · ${stats.totalRR >= 0 ? "+" : ""}${stats.totalRR.toFixed(2)}R</td>
+            </tr>
+          `;
+          bodyHtml += buildDataRows(group);
+        });
+      } else {
+        bodyHtml = buildDataRows(list);
+      }
+
+      el.tableArea.innerHTML = `
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>商品</th>
+                <th>結果</th>
+                <th>RR</th>
+                <th>總 RR</th>
+                <th>交易時段</th>
+                <th>文字紀錄</th>
+                <th>圖片</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${bodyHtml}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function render() {
+      const visible = getVisibleRecords();
+      renderStats(visible);
+      renderMonthView(visible);
+      renderTable(visible);
+    }
+
+    function setMonthTabLabel() {
+      const [year, month] = getActiveMonthKey().split("-").map(Number);
+      el.monthTab.textContent = `月份交易 ${formatMonthLabel(year, month - 1)}`;
+    }
+
+    function setActiveMonth(monthKey) {
+      activeMonthKey = monthKey;
+      selectedCalendarDate = "";
+      setMonthTabLabel();
+      render();
+    }
+
+    function resetForm() {
+      editingId = "";
+      selectedResult = "";
+      pendingImages = [];
+      el.modalTitle.textContent = "新增交易";
+      el.symbol.value = "";
+      el.date.value = todayString();
+      el.session.value = "亞洲盤";
+      el.rr.value = "";
+      el.note.value = "";
+      el.fileInput.value = "";
+      document.querySelectorAll(".result-btn").forEach((btn) => btn.classList.remove("active"));
+      renderPreview();
+    }
+
+    function openModal(id = "") {
+      resetForm();
+      if (id) {
+        const record = records.find((item) => item.id === id);
+        if (record) {
+          editingId = record.id;
+          selectedResult = record.result;
+          pendingImages = [...record.imgs];
+          el.modalTitle.textContent = "編輯交易";
+          el.symbol.value = record.symbol;
+          el.date.value = record.date;
+          el.session.value = record.session;
+          el.rr.value = record.rr;
+          el.note.value = record.note;
+          document.querySelectorAll(".result-btn").forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.result === selectedResult);
+          });
+          renderPreview();
+        }
+      }
+      el.modalBg.style.display = "flex";
+      window.setTimeout(() => el.symbol.focus(), 60);
+    }
+
+    function closeModal() {
+      el.modalBg.style.display = "none";
+    }
+
+    function renderPreview() {
+      el.previewList.innerHTML = pendingImages.map((src, index) => `
+        <div class="preview-item">
+          <img src="${escapeHtml(src)}" alt="預覽圖片">
+          <button class="preview-remove" type="button" data-action="remove-preview" data-index="${index}" aria-label="刪除圖片">×</button>
+        </div>
+      `).join("");
+    }
+
+    function pickResult(result) {
+      selectedResult = result;
+      document.querySelectorAll(".result-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.result === result);
+      });
+    }
+
+    async function resizeImage(file) {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const image = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+
+      let { width, height } = image;
+      if (width > MAX_IMAGE_SIDE || height > MAX_IMAGE_SIDE) {
+        const ratio = Math.min(MAX_IMAGE_SIDE / width, MAX_IMAGE_SIDE / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(image, 0, 0, width, height);
+      return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+    }
+
+    async function appendImages(files) {
+      const imageFiles = [...files].filter((file) => file.type.startsWith("image/"));
+      if (!imageFiles.length) return;
+
+      setSyncStatus("loading", "處理圖片中");
+      for (const file of imageFiles) {
+        try {
+          const resized = await resizeImage(file);
+          pendingImages.push(resized);
+        } catch (error) {
+          console.error(error);
+          showToast(`圖片處理失敗：${file.name}`, "err");
+        }
+      }
+      renderPreview();
+      setSyncStatus("ok", "圖片已加入");
+    }
+
+    async function appendClipboardImages(items) {
+      const files = [];
+      for (const item of items) {
+        if (item.kind === "file" && item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          if (file) files.push(file);
+        }
+      }
+      if (files.length) {
+        await appendImages(files);
+        showToast("已貼上圖片");
+      }
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    }
+
+    async function loadRecords() {
+      setSyncStatus("loading", "同步中");
+      el.tableArea.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <strong>載入資料中</strong>
+          正在從 Google Sheets 抓取紀錄...
+        </div>
+      `;
+
+      try {
+        const data = await fetchJson(`${API_URL}?action=getAll`);
+        records = Array.isArray(data.records) ? data.records.map(normalizeRecord) : [];
+        setSyncStatus("ok", "已同步");
+        render();
+      } catch (error) {
+        console.error(error);
+        setSyncStatus("err", "連線失敗");
+        renderStats([]);
+        el.tableArea.innerHTML = `
+          <div class="empty">
+            <strong>無法載入資料</strong>
+            請確認 Apps Script 已重新部署，且存取權為「所有人」。
+          </div>
+        `;
+        showToast("無法讀取 Google Sheets，請檢查 API 設定", "err");
+      }
+    }
+
+    async function saveRecord() {
+      if (isSaving) return;
+
+      const symbol = el.symbol.value.trim();
+      const date = el.date.value;
+      const rr = Number(el.rr.value);
+      const session = el.session.value;
+      const note = el.note.value.trim();
+
+      if (!symbol) return showToast("請輸入交易商品名稱", "err");
+      if (!date) return showToast("請選擇日期", "err");
+      if (!selectedResult) return showToast("請選擇贏或輸", "err");
+      if (!Number.isFinite(rr) || rr <= 0) return showToast("請輸入有效的 RR 值", "err");
+
+      const record = normalizeRecord({
+        id: editingId || Date.now(),
+        symbol,
+        date,
+        result: selectedResult,
+        rr,
+        session,
+        note,
+        imgs: pendingImages
+      });
+
+      isSaving = true;
+      el.saveBtn.disabled = true;
+      el.saveBtn.textContent = "儲存中...";
+      setSyncStatus("loading", "同步中");
+
+      try {
+        const data = await fetchJson(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "save", record })
+        });
+
+        if (!data.ok) {
+          throw new Error(data.error || "save failed");
+        }
+
+        closeModal();
+        showToast("已儲存到 Google Sheets");
+        await loadRecords();
+      } catch (error) {
+        console.error(error);
+        setSyncStatus("err", "儲存失敗");
+        showToast("儲存失敗，請檢查 Apps Script 部署", "err");
+      } finally {
+        isSaving = false;
+        el.saveBtn.disabled = false;
+        el.saveBtn.textContent = "儲存";
+      }
+    }
+
+    async function deleteRecord(id) {
+      if (!window.confirm("確定要刪除這筆交易紀錄嗎？")) return;
+
+      setSyncStatus("loading", "同步中");
+      try {
+        const data = await fetchJson(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "delete", id })
+        });
+        if (!data.ok) {
+          throw new Error(data.error || "delete failed");
+        }
+        showToast("已刪除");
+        await loadRecords();
+      } catch (error) {
+        console.error(error);
+        setSyncStatus("err", "刪除失敗");
+        showToast("刪除失敗", "err");
+      }
+    }
+
+    function openLightbox(src) {
+      el.lightboxImg.src = src;
+      el.lightbox.style.display = "flex";
+    }
+
+    function closeLightbox() {
+      el.lightbox.style.display = "none";
+      el.lightboxImg.src = "";
+    }
+
+    function bindEvents() {
+      document.getElementById("add-btn").addEventListener("click", () => openModal());
+      document.getElementById("refresh-btn").addEventListener("click", loadRecords);
+      document.getElementById("cancel-btn").addEventListener("click", closeModal);
+      document.getElementById("close-modal-btn").addEventListener("click", closeModal);
+      el.saveBtn.addEventListener("click", saveRecord);
+      el.modalBg.addEventListener("click", (event) => {
+        if (event.target === el.modalBg) closeModal();
+      });
+      el.lightbox.addEventListener("click", closeLightbox);
+
+      document.querySelectorAll(".tab").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentTab = button.dataset.tab;
+          document.querySelectorAll(".tab").forEach((tab) => {
+            tab.classList.toggle("active", tab.dataset.tab === currentTab);
+          });
+          render();
+        });
+      });
+
+      document.querySelectorAll(".result-btn").forEach((button) => {
+        button.addEventListener("click", () => pickResult(button.dataset.result));
+      });
+
+      el.fileInput.addEventListener("change", async (event) => {
+        await appendImages(event.target.files);
+        event.target.value = "";
+      });
+
+      el.uploadZone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        el.uploadZone.classList.add("drag");
+      });
+      el.uploadZone.addEventListener("dragleave", () => {
+        el.uploadZone.classList.remove("drag");
+      });
+      el.uploadZone.addEventListener("drop", async (event) => {
+        event.preventDefault();
+        el.uploadZone.classList.remove("drag");
+        await appendImages(event.dataTransfer.files);
+      });
+
+      document.addEventListener("paste", async (event) => {
+        if (el.modalBg.style.display !== "flex") return;
+        await appendClipboardImages(event.clipboardData.items);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeModal();
+          closeLightbox();
+        }
+      });
+
+      document.body.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-action]");
+        if (!target) return;
+
+        const action = target.dataset.action;
+        if (action === "edit") {
+          openModal(target.dataset.id);
+        } else if (action === "delete") {
+          deleteRecord(target.dataset.id);
+        } else if (action === "lightbox") {
+          openLightbox(target.dataset.src);
+        } else if (action === "select-day") {
+          if (getMonthKey(target.dataset.date) !== getActiveMonthKey()) return;
+          selectedCalendarDate = target.dataset.date;
+          render();
+        } else if (action === "change-month") {
+          const nextMonthKey = shiftMonthKey(getActiveMonthKey(), Number(target.dataset.offset || 0));
+          if (nextMonthKey > getTodayMonthKey()) return;
+          setActiveMonth(nextMonthKey);
+        } else if (action === "remove-preview") {
+          pendingImages.splice(Number(target.dataset.index), 1);
+          renderPreview();
+        }
+      });
+    }
+
+    function init() {
+      activeMonthKey = getTodayMonthKey();
+      setMonthTabLabel();
+      renderStats([]);
+      bindEvents();
+      resetForm();
+      loadRecords();
+    }
+
+    init();
+  </script>
+</body>
+</html>
