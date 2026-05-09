@@ -1072,9 +1072,11 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzVETF6ZUvkVjcfS2ag1IY_0-YhOnCbUj30P0xpCbdwuJSg-569J94oOrgMEV55q6MUNQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycby93eLQPEk6-MtPbpoOXSeCTrNJl2liuFl3sYDdm6Jn5ZDL1lagVUyd1ffzlrYe5ctQ1g/exec";
     const MAX_IMAGE_SIDE = 1600;
     const JPEG_QUALITY = 0.82;
+    const INITIAL_MONTHS_TO_LOAD = 3;
+    const CACHE_KEY = "trading-journal-cache-v1";
 
     let records = [];
     let currentTab = "all";
@@ -1085,6 +1087,9 @@
     let selectedCalendarDate = "";
     let activeMonthKey = "";
     let activeSymbolFilter = "";
+    let availableMonths = [];
+    let availableSymbols = [];
+    let loadedMonths = new Set();
 
     const el = {
       syncDot: document.getElementById("sync-dot"),
@@ -1118,6 +1123,47 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
+    }
+
+    function getCachePayload() {
+      return {
+        records,
+        availableMonths,
+        availableSymbols,
+        loadedMonths: [...loadedMonths],
+        activeMonthKey,
+        savedAt: Date.now()
+      };
+    }
+
+    function saveCache() {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(getCachePayload()));
+      } catch (error) {
+        console.warn("cache save failed", error);
+      }
+    }
+
+    function restoreCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return false;
+        const cache = JSON.parse(raw);
+        records = Array.isArray(cache.records) ? cache.records.map(normalizeRecord) : [];
+        availableMonths = Array.isArray(cache.availableMonths) ? cache.availableMonths : [];
+        availableSymbols = Array.isArray(cache.availableSymbols) ? cache.availableSymbols : [];
+        loadedMonths = new Set(Array.isArray(cache.loadedMonths) ? cache.loadedMonths : []);
+        if (cache.activeMonthKey) {
+          activeMonthKey = cache.activeMonthKey;
+        }
+        renderSymbolFilterOptions();
+        render();
+        setSyncStatus("loading", "使用快取中");
+        return true;
+      } catch (error) {
+        console.warn("cache restore failed", error);
+        return false;
+      }
     }
 
     function showToast(message, type = "ok") {
@@ -1266,7 +1312,7 @@
     }
 
     function renderSymbolFilterOptions() {
-      const symbols = getUniqueSymbols(records);
+      const symbols = availableSymbols.length ? availableSymbols : getUniqueSymbols(records);
       const options = [`<option value="">全部商品</option>`].concat(
         symbols.map((symbol) => `<option value="${escapeHtml(symbol)}">${escapeHtml(symbol)}</option>`)
       );
@@ -1280,6 +1326,119 @@
       el.filterMeta.textContent = activeSymbolFilter
         ? `目前顯示 ${activeSymbolFilter}`
         : "目前顯示全部商品";
+    }
+
+    function mergeRecords(newRecords) {
+      const merged = new Map(records.map((record) => [record.id, record]));
+      newRecords.forEach((record) => {
+        merged.set(record.id, record);
+      });
+      records = [...merged.values()];
+      saveCache();
+    }
+
+    function upsertLocalRecord(record) {
+      const normalized = normalizeRecord(record);
+      const index = records.findIndex((item) => item.id === normalized.id);
+      if (index === -1) {
+        records.push(normalized);
+      } else {
+        records[index] = normalized;
+      }
+
+      const monthKey = getMonthKey(normalized.date);
+      if (monthKey) {
+        loadedMonths.add(monthKey);
+        if (!availableMonths.includes(monthKey)) {
+          availableMonths.push(monthKey);
+          availableMonths.sort().reverse();
+        }
+      }
+
+      const symbol = String(normalized.symbol || "").trim();
+      if (symbol && !availableSymbols.includes(symbol)) {
+        availableSymbols.push(symbol);
+        availableSymbols.sort((a, b) => a.localeCompare(b));
+      }
+
+      renderSymbolFilterOptions();
+      saveCache();
+      render();
+    }
+
+    function removeLocalRecord(id) {
+      const target = records.find((item) => item.id === id);
+      records = records.filter((item) => item.id !== id);
+
+      if (target) {
+        const stillHasMonth = records.some((item) => getMonthKey(item.date) === getMonthKey(target.date));
+        if (!stillHasMonth) {
+          availableMonths = availableMonths.filter((monthKey) => monthKey !== getMonthKey(target.date));
+        }
+
+        const stillHasSymbol = records.some((item) => String(item.symbol || "").trim() === String(target.symbol || "").trim());
+        if (!stillHasSymbol) {
+          availableSymbols = availableSymbols.filter((symbol) => symbol !== String(target.symbol || "").trim());
+        }
+      }
+
+      renderSymbolFilterOptions();
+      saveCache();
+      render();
+    }
+
+    function getUnloadedMonths() {
+      return availableMonths.filter((monthKey) => !loadedMonths.has(monthKey));
+    }
+
+    async function fetchMeta() {
+      const data = await fetchJson(`${API_URL}?action=getMeta`);
+      const meta = data.meta || {};
+      availableMonths = Array.isArray(meta.months) ? meta.months : [];
+      availableSymbols = Array.isArray(meta.symbols) ? meta.symbols : [];
+      renderSymbolFilterOptions();
+      saveCache();
+      return meta;
+    }
+
+    async function loadMonth(monthKey) {
+      if (!monthKey || loadedMonths.has(monthKey)) return;
+      const data = await fetchJson(`${API_URL}?action=getByMonth&month=${encodeURIComponent(monthKey)}`);
+      const monthRecords = Array.isArray(data.records) ? data.records.map(normalizeRecord) : [];
+      mergeRecords(monthRecords);
+      loadedMonths.add(monthKey);
+      saveCache();
+    }
+
+    async function loadInitialMonths() {
+      const monthsToLoad = availableMonths.slice(0, INITIAL_MONTHS_TO_LOAD);
+      for (const monthKey of monthsToLoad) {
+        await loadMonth(monthKey);
+      }
+
+      if (!monthsToLoad.length && getTodayMonthKey()) {
+        await loadMonth(getTodayMonthKey());
+      }
+    }
+
+    async function ensureMonthLoaded(monthKey) {
+      if (!monthKey) return;
+      if (!loadedMonths.has(monthKey)) {
+        setSyncStatus("loading", "載入月份中");
+        await loadMonth(monthKey);
+        setSyncStatus("ok", "已同步");
+      }
+    }
+
+    async function loadMoreMonths(count = 2) {
+      const months = getUnloadedMonths().slice(0, count);
+      if (!months.length) return;
+      setSyncStatus("loading", "載入更多月份");
+      for (const monthKey of months) {
+        await loadMonth(monthKey);
+      }
+      setSyncStatus("ok", "已同步");
+      render();
     }
 
     function getVisibleRecords() {
@@ -1466,7 +1625,7 @@
       return rows.map((record) => {
         const rrSigned = record.result === "win" ? record.rr : -record.rr;
         const images = record.imgs.map((src) =>
-          `<img class="thumb" src="${escapeHtml(src)}" alt="交易截圖" data-action="lightbox" data-src="${escapeHtml(src)}">`
+          `<img class="thumb" loading="lazy" decoding="async" src="${escapeHtml(src)}" alt="交易截圖" data-action="lightbox" data-src="${escapeHtml(src)}">`
         ).join("");
 
         return `
@@ -1505,6 +1664,7 @@
       }
 
       let bodyHtml = "";
+      const hasMoreMonths = currentTab === "all" && getUnloadedMonths().length > 0;
 
       if (currentTab === "all") {
         const groups = new Map();
@@ -1545,6 +1705,7 @@
             </thead>
             <tbody>${bodyHtml}</tbody>
           </table>
+          ${hasMoreMonths ? `<div style="padding:16px 0 4px;text-align:center"><button class="btn btn-ghost" type="button" data-action="load-more-months">載入更早月份</button></div>` : ""}
         </div>
       `;
     }
@@ -1561,9 +1722,10 @@
       el.monthTab.textContent = `月份交易 ${formatMonthLabel(year, month - 1)}`;
     }
 
-    function setActiveMonth(monthKey) {
+    async function setActiveMonth(monthKey) {
       activeMonthKey = monthKey;
       selectedCalendarDate = "";
+      await ensureMonthLoaded(monthKey);
       setMonthTabLabel();
       render();
     }
@@ -1726,16 +1888,22 @@
         <div class="loading">
           <div class="spinner"></div>
           <strong>載入資料中</strong>
-          正在從 Google Sheets 抓取紀錄...
+          正在載入近期月份資料...
         </div>
       `;
 
       try {
-        const data = await fetchJson(`${API_URL}?action=getAll`);
-        records = Array.isArray(data.records) ? data.records.map(normalizeRecord) : [];
+        records = [];
+        loadedMonths = new Set();
+        await fetchMeta();
+        await loadInitialMonths();
+        if (activeMonthKey && availableMonths.includes(activeMonthKey) && !loadedMonths.has(activeMonthKey)) {
+          await ensureMonthLoaded(activeMonthKey);
+        }
         renderSymbolFilterOptions();
         setSyncStatus("ok", "已同步");
         render();
+        saveCache();
       } catch (error) {
         console.error(error);
         setSyncStatus("err", "連線失敗");
@@ -1791,9 +1959,10 @@
           throw new Error(data.error || "save failed");
         }
 
+        upsertLocalRecord(record);
         closeModal();
         showToast("已儲存到 Google Sheets");
-        await loadRecords();
+        setSyncStatus("ok", "已同步");
       } catch (error) {
         console.error(error);
         setSyncStatus("err", "儲存失敗");
@@ -1818,8 +1987,9 @@
         if (!data.ok) {
           throw new Error(data.error || "delete failed");
         }
+        removeLocalRecord(id);
         showToast("已刪除");
-        await loadRecords();
+        setSyncStatus("ok", "已同步");
       } catch (error) {
         console.error(error);
         setSyncStatus("err", "刪除失敗");
@@ -1927,7 +2097,7 @@
         }
       });
 
-      document.body.addEventListener("click", (event) => {
+      document.body.addEventListener("click", async (event) => {
         const target = event.target.closest("[data-action]");
         if (!target) return;
 
@@ -1945,7 +2115,9 @@
         } else if (action === "change-month") {
           const nextMonthKey = shiftMonthKey(getActiveMonthKey(), Number(target.dataset.offset || 0));
           if (nextMonthKey > getTodayMonthKey()) return;
-          setActiveMonth(nextMonthKey);
+          await setActiveMonth(nextMonthKey);
+        } else if (action === "load-more-months") {
+          await loadMoreMonths();
         } else if (action === "remove-preview") {
           pendingImages.splice(Number(target.dataset.index), 1);
           renderPreview();
@@ -1960,6 +2132,7 @@
       renderSymbolFilterOptions();
       bindEvents();
       resetForm();
+      restoreCache();
       loadRecords();
     }
 
