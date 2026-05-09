@@ -148,6 +148,59 @@
       justify-content: flex-end;
     }
 
+    .filter-bar {
+      padding: 0 16px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .filter-select {
+      min-width: 210px;
+      border: 1px solid var(--border-strong);
+      background: #111722;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
+      color-scheme: dark;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .filter-select option {
+      background: #111722;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+
+    .filter-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     .btn {
       border: 0;
       border-radius: 12px;
@@ -416,7 +469,7 @@
 
     .day-inline-stats {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -438,6 +491,29 @@
 
     .day-inline-stat strong {
       font: 700 18px var(--mono);
+    }
+
+    .hero-rr {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      margin-bottom: 14px;
+    }
+
+    .hero-rr span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .hero-rr strong {
+      display: block;
+      font: 700 32px var(--mono);
+      letter-spacing: -0.04em;
     }
 
     .day-records {
@@ -708,6 +784,11 @@
     }
 
     .upload-zone.drag { background: rgba(79, 124, 255, 0.08); border-color: var(--accent); color: var(--text); }
+    .upload-zone:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.14);
+    }
     .upload-zone input {
       position: absolute;
       inset: 0;
@@ -716,6 +797,12 @@
     }
     .upload-copy { font-size: 13px; }
     .upload-copy strong { display: block; color: var(--text); margin-bottom: 4px; }
+    .upload-paste-tip {
+      margin-top: 10px;
+      color: #9cb2db;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.06em;
+    }
 
     .preview-list {
       margin-top: 12px;
@@ -819,6 +906,9 @@
       .panel-head { align-items: stretch; }
       .actions { justify-content: stretch; }
       .actions .btn { flex: 1; justify-content: center; }
+      .filter-bar { align-items: stretch; }
+      .filter-group { align-items: stretch; }
+      .filter-select { width: 100%; min-width: 0; }
       .stats { grid-template-columns: 1fr; }
       .result-row { grid-template-columns: 1fr; }
       .modal { padding: 18px; border-radius: 18px; }
@@ -877,6 +967,16 @@
       </div>
 
       <div class="stats" id="stats"></div>
+
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">商品篩選</span>
+          <select id="symbol-filter" class="filter-select">
+            <option value="">全部商品</option>
+          </select>
+        </div>
+        <div class="filter-meta" id="filter-meta">目前顯示全部商品</div>
+      </div>
 
       <div id="month-view" class="month-view" style="display:none"></div>
 
@@ -951,6 +1051,7 @@
               <strong>點擊、拖曳，或直接貼上圖片</strong>
               支援多張截圖，會自動壓縮後再同步。
             </div>
+            <div class="upload-paste-tip">先點這個框，再按 Ctrl+V / Cmd+V 貼上截圖</div>
           </div>
           <div class="preview-list" id="preview-list"></div>
           <div class="hint">建議單張小於 2MB。為了讓 Google Sheets 不容易爆量，圖片會先縮圖壓縮。</div>
@@ -971,7 +1072,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx5jkUY3yvXGTnBe3_PNbvDVw6s9hl-Frvm2tZDnbMSPE3d7A4zDs6OlNWLCqDCjASxfg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzVETF6ZUvkVjcfS2ag1IY_0-YhOnCbUj30P0xpCbdwuJSg-569J94oOrgMEV55q6MUNQ/exec";
     const MAX_IMAGE_SIDE = 1600;
     const JPEG_QUALITY = 0.82;
 
@@ -983,11 +1084,14 @@
     let isSaving = false;
     let selectedCalendarDate = "";
     let activeMonthKey = "";
+    let activeSymbolFilter = "";
 
     const el = {
       syncDot: document.getElementById("sync-dot"),
       syncText: document.getElementById("sync-text"),
       stats: document.getElementById("stats"),
+      symbolFilter: document.getElementById("symbol-filter"),
+      filterMeta: document.getElementById("filter-meta"),
       monthView: document.getElementById("month-view"),
       tableArea: document.getElementById("table-area"),
       monthTab: document.getElementById("month-tab"),
@@ -1148,8 +1252,38 @@
       });
     }
 
+    function matchesSymbolFilter(record) {
+      if (!activeSymbolFilter) return true;
+      return String(record.symbol || "").trim() === activeSymbolFilter;
+    }
+
+    function getUniqueSymbols(list = records) {
+      return [...new Set(
+        list
+          .map((record) => String(record.symbol || "").trim())
+          .filter(Boolean)
+      )].sort((a, b) => a.localeCompare(b));
+    }
+
+    function renderSymbolFilterOptions() {
+      const symbols = getUniqueSymbols(records);
+      const options = [`<option value="">全部商品</option>`].concat(
+        symbols.map((symbol) => `<option value="${escapeHtml(symbol)}">${escapeHtml(symbol)}</option>`)
+      );
+      el.symbolFilter.innerHTML = options.join("");
+
+      if (activeSymbolFilter && !symbols.includes(activeSymbolFilter)) {
+        activeSymbolFilter = "";
+      }
+
+      el.symbolFilter.value = activeSymbolFilter;
+      el.filterMeta.textContent = activeSymbolFilter
+        ? `目前顯示 ${activeSymbolFilter}`
+        : "目前顯示全部商品";
+    }
+
     function getVisibleRecords() {
-      const sorted = sortRecordsDesc(records);
+      const sorted = sortRecordsDesc(records).filter(matchesSymbolFilter);
       if (currentTab === "all") return sorted;
       const monthKey = getActiveMonthKey();
       return sorted.filter((record) => getMonthKey(record.date) === monthKey);
@@ -1198,7 +1332,7 @@
       ensureSelectedCalendarDate(monthRecords, monthKey);
 
       const weeks = getCalendarWeeks(monthKey);
-      const byDate = getRecordsByDate(records);
+      const byDate = getRecordsByDate(monthRecords);
       const selectedList = sortRecordsDesc(byDate.get(selectedCalendarDate) || []);
       const selectedStats = calcStats(selectedList);
       const canGoNext = monthKey < getTodayMonthKey();
@@ -1292,11 +1426,11 @@
             <div class="day-panel">
               <div class="day-panel-title">${formatDateLabel(selectedCalendarDate)} 當日交易</div>
               <div class="day-panel-sub">這裡會顯示你點選日期的交易明細與勝率。</div>
+              <div class="hero-rr">
+                <span>當日 RR</span>
+                <strong class="${selectedStats.totalRR < 0 ? "neg" : "pos"}">${selectedStats.totalRR >= 0 ? "+" : ""}${selectedStats.totalRR.toFixed(1)}R</strong>
+              </div>
               <div class="day-inline-stats">
-                <div class="day-inline-stat">
-                  <span>當日 RR</span>
-                  <strong class="${selectedStats.totalRR < 0 ? "neg" : "pos"}">${selectedStats.totalRR >= 0 ? "+" : ""}${selectedStats.totalRR.toFixed(2)}R</strong>
-                </div>
                 <div class="day-inline-stat">
                   <span>交易筆數</span>
                   <strong>${selectedStats.total}</strong>
@@ -1311,7 +1445,7 @@
 
             <div class="day-panel">
               <div class="day-panel-title">當日摘要</div>
-              <div class="day-panel-sub">${selectedStats.wins} 勝 / ${selectedStats.losses} 負</div>
+              <div class="day-panel-sub">勝率 ${selectedStats.total ? `${selectedStats.winRate}%` : "—"} · ${selectedStats.wins} 勝 / ${selectedStats.losses} 負</div>
               <div class="day-inline-stats">
                 <div class="day-inline-stat">
                   <span>贏單</span>
@@ -1321,10 +1455,6 @@
                   <span>輸單</span>
                   <strong class="neg">${selectedStats.losses}</strong>
                 </div>
-                <div class="day-inline-stat">
-                  <span>點選日期</span>
-                  <strong>${selectedCalendarDate.slice(-2)}</strong>
-                </div>
               </div>
             </div>
           </div>
@@ -1333,18 +1463,6 @@
     }
 
     function buildDataRows(rows) {
-      const chronological = [...rows].sort((a, b) => {
-        if (a.date === b.date) return String(a.id).localeCompare(String(b.id));
-        return String(a.date).localeCompare(String(b.date));
-      });
-
-      const cumulativeMap = new Map();
-      let runningRR = 0;
-      chronological.forEach((record) => {
-        runningRR += record.result === "win" ? record.rr : -record.rr;
-        cumulativeMap.set(record.id, runningRR);
-      });
-
       return rows.map((record) => {
         const rrSigned = record.result === "win" ? record.rr : -record.rr;
         const images = record.imgs.map((src) =>
@@ -1357,7 +1475,6 @@
             <td><div class="symbol">${escapeHtml(record.symbol || "—")}</div></td>
             <td><span class="badge ${record.result}">${record.result === "win" ? "WIN" : "LOSS"}</span></td>
             <td class="rr-cell ${rrSigned < 0 ? "neg" : "pos"}">${rrSigned >= 0 ? "+" : ""}${rrSigned.toFixed(1)}R</td>
-            <td class="cum-cell ${cumulativeMap.get(record.id) < 0 ? "neg" : "pos"}">${cumulativeMap.get(record.id) >= 0 ? "+" : ""}${cumulativeMap.get(record.id).toFixed(1)}R</td>
             <td><span class="session-pill">${escapeHtml(record.session || "—")}</span></td>
             <td><div class="note">${escapeHtml(record.note || "").replace(/\n/g, "<br>") || "—"}</div></td>
             <td><div class="thumbs">${images || "—"}</div></td>
@@ -1420,7 +1537,6 @@
                 <th>商品</th>
                 <th>結果</th>
                 <th>RR</th>
-                <th>總 RR</th>
                 <th>交易時段</th>
                 <th>文字紀錄</th>
                 <th>圖片</th>
@@ -1573,6 +1689,29 @@
       }
     }
 
+    function extractClipboardFiles(clipboardData) {
+      if (!clipboardData) return [];
+
+      const files = [];
+
+      if (clipboardData.files && clipboardData.files.length) {
+        [...clipboardData.files].forEach((file) => {
+          if (file.type.startsWith("image/")) files.push(file);
+        });
+      }
+
+      if (clipboardData.items && clipboardData.items.length) {
+        [...clipboardData.items].forEach((item) => {
+          if (item.kind === "file" && item.type.startsWith("image/")) {
+            const file = item.getAsFile();
+            if (file) files.push(file);
+          }
+        });
+      }
+
+      return files;
+    }
+
     async function fetchJson(url, options = {}) {
       const response = await fetch(url, options);
       if (!response.ok) {
@@ -1594,6 +1733,7 @@
       try {
         const data = await fetchJson(`${API_URL}?action=getAll`);
         records = Array.isArray(data.records) ? data.records.map(normalizeRecord) : [];
+        renderSymbolFilterOptions();
         setSyncStatus("ok", "已同步");
         render();
       } catch (error) {
@@ -1722,9 +1862,21 @@
         button.addEventListener("click", () => pickResult(button.dataset.result));
       });
 
+      el.symbolFilter.addEventListener("change", () => {
+        activeSymbolFilter = el.symbolFilter.value;
+        selectedCalendarDate = "";
+        renderSymbolFilterOptions();
+        render();
+      });
+
       el.fileInput.addEventListener("change", async (event) => {
         await appendImages(event.target.files);
         event.target.value = "";
+      });
+
+      el.uploadZone.setAttribute("tabindex", "0");
+      el.uploadZone.addEventListener("click", () => {
+        el.uploadZone.focus();
       });
 
       el.uploadZone.addEventListener("dragover", (event) => {
@@ -1740,9 +1892,32 @@
         await appendImages(event.dataTransfer.files);
       });
 
+      el.uploadZone.addEventListener("paste", async (event) => {
+        const files = extractClipboardFiles(event.clipboardData);
+        if (!files.length) return;
+        event.preventDefault();
+        await appendImages(files);
+        showToast("已貼上截圖");
+      });
+
       document.addEventListener("paste", async (event) => {
         if (el.modalBg.style.display !== "flex") return;
-        await appendClipboardImages(event.clipboardData.items);
+
+        const target = event.target;
+        const isTypingField = target && (
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable
+        );
+
+        if (isTypingField && target !== el.uploadZone) return;
+
+        const files = extractClipboardFiles(event.clipboardData);
+        if (!files.length) return;
+
+        event.preventDefault();
+        await appendImages(files);
+        showToast("已貼上截圖");
       });
 
       document.addEventListener("keydown", (event) => {
@@ -1782,6 +1957,7 @@
       activeMonthKey = getTodayMonthKey();
       setMonthTabLabel();
       renderStats([]);
+      renderSymbolFilterOptions();
       bindEvents();
       resetForm();
       loadRecords();
